@@ -1,19 +1,24 @@
-import { Form, ActionPanel, Action, showToast } from "@raycast/api";
+import { Form, ActionPanel, Action, showToast, closeMainWindow } from "@raycast/api";
+import namedColors from "color-name-list";
+import { ClipboardUtil } from "./utils/clipboardUtil";
+import { setTimeout } from "timers/promises";
 
 type Values = {
   textfield: string;
-  textarea: string;
-  datepicker: Date;
-  checkbox: boolean;
-  dropdown: string;
-  tokeneditor: string[];
 };
 
-export default function Command() {
-  function handleSubmit(values: Values) {
-    console.log(values);
-    showToast({ title: "Submitted form", message: "See logs for submitted values" });
-  }
+const Command = () => {
+  const handleSubmit = async (values: Values) => {
+    const color = namedColors.find((color) => color.hex === `#${values.textfield.toLowerCase()}`);
+    if (color === undefined) {
+      showToast({ title: "Not Search Color Name" });
+    } else {
+      await ClipboardUtil(color.name);
+      await showToast({ title: "Searched Color Name", message: `Copied Color Name: ${color.name}` });
+      await setTimeout(1000);
+      await closeMainWindow({ clearRootSearch: true });
+    }
+  };
 
   return (
     <Form
@@ -23,18 +28,9 @@ export default function Command() {
         </ActionPanel>
       }
     >
-      <Form.Description text="This form showcases all available form elements." />
-      <Form.TextField id="textfield" title="Text field" placeholder="Enter text" defaultValue="Raycast" />
-      <Form.TextArea id="textarea" title="Text area" placeholder="Enter multi-line text" />
-      <Form.Separator />
-      <Form.DatePicker id="datepicker" title="Date picker" />
-      <Form.Checkbox id="checkbox" title="Checkbox" label="Checkbox Label" storeValue />
-      <Form.Dropdown id="dropdown" title="Dropdown">
-        <Form.Dropdown.Item value="dropdown-item" title="Dropdown Item" />
-      </Form.Dropdown>
-      <Form.TagPicker id="tokeneditor" title="Tag picker">
-        <Form.TagPicker.Item value="tagpicker-item" title="Tag Picker Item" />
-      </Form.TagPicker>
+      <Form.TextField id="textfield" title="Color field" placeholder="Enter Color Code (ex. FFFFFF)" />
     </Form>
   );
-}
+};
+
+export default Command;

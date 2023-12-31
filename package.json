@@ -10,13 +10,14 @@
   "commands": [
     {
       "name": "index",
-      "title": "Submit Form",
-      "description": "Template for submitting a form",
+      "title": "Search Color Name",
+      "description": "Color Name From Color Pizz",
       "mode": "view"
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.64.4"
+    "@raycast/api": "^1.64.4",
+    "color-name-list": "^10.18.0"
   },
   "devDependencies": {
     "@raycast/eslint-config": "^1.0.6",
