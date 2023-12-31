@@ -18,6 +18,7 @@
   "dependencies": {
     "@raycast/api": "^1.64.4",
     "axios": "^1.6.3",
+    "change-case": "^5.3.0",
     "color-name-list": "^10.18.0"
   },
   "devDependencies": {
