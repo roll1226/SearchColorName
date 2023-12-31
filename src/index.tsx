@@ -1,7 +1,7 @@
 import { Form, ActionPanel, Action, showToast, closeMainWindow } from "@raycast/api";
-import namedColors from "color-name-list";
 import { ClipboardUtil } from "./utils/clipboardUtil";
 import { setTimeout } from "timers/promises";
+import { SearchColorName } from "./utils/colorUtil";
 
 type Values = {
   textfield: string;
@@ -9,14 +9,15 @@ type Values = {
 
 const Command = () => {
   const handleSubmit = async (values: Values) => {
-    const color = namedColors.find((color) => color.hex === `#${values.textfield.toLowerCase()}`);
-    if (color === undefined) {
-      showToast({ title: "Not Search Color Name" });
-    } else {
-      await ClipboardUtil(color.name);
-      await showToast({ title: "Searched Color Name", message: `Copied Color Name: ${color.name}` });
+    try {
+      const colors = await SearchColorName(values.textfield.toLowerCase());
+      const colorName = colors.colors[0].name;
+      await ClipboardUtil(colorName);
+      await showToast({ title: "Searched Color Name", message: `Copied Color Name: ${colorName}` });
       await setTimeout(1000);
       await closeMainWindow({ clearRootSearch: true });
+    } catch (error) {
+      showToast({ title: "Not Search Color Name" });
     }
   };
 
